@@ -19,6 +19,12 @@ or use conda:
 conda install pyshifu
 ```
 
+or login into horton:
+```bazaar
+ssh phxbastion2.phx.paypal.com
+su website
+```
+
 ## How to Run Shifu Pipeline
 
 Shifu will parse your Hadoop platform settings and set all Hadoop conf for Shifu runtime. 

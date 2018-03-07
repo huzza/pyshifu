@@ -95,16 +95,14 @@ function find_ld_library_path() {
     echo ${_ld_library_path}
 }
 
-if [ "${SHIFU_HOME}" == "" ]; then
-    COMMAND=`which $0`
-    if [ -L ${COMMAND} ]; then
-        COMMAND=`readlink ${COMMAND}`
-    fi
-    
-    BIN_DIR=`dirname ${COMMAND}`
-    export SHIFU_HOME="${BIN_DIR}/.."
-    echo "SHIFU_HOME is not set. Using ${BIN_DIR}/.. as SHIFU_HOME"
+COMMAND=`which $0`
+if [ -L ${COMMAND} ]; then
+    COMMAND=`readlink ${COMMAND}`
 fi
+
+BIN_DIR=`dirname ${COMMAND}`
+export SHIFU_HOME="${BIN_DIR}/.."
+echo "SHIFU_HOME is not set. Using ${BIN_DIR}/.. as SHIFU_HOME"
 
 SHIFU_OPTS=${JAVA_OPTS:=${SHIFU_OPTS}}
 

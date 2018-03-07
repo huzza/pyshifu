@@ -26,20 +26,20 @@ class Shifu(Shell):
             print ("Shifu.new() failed! Please check if you successfully install pyshifu.")
 
     def init(self):
-        self.__run_command("init")
+        self._run_command("init")
 
     def stats(self):
-        self.__run_command("stats")
+        self._run_command("stats")
 
     def norm(self):
-        self.__run_command("norm")
+        self._run_command("norm")
 
     def varsel(self):
-        self.__run_command("varsel")
+        self._run_command("varsel")
 
     def train(self):
-        self.__run_command("train")
+        self._run_command("train")
 
     def eval(self):
-        self.__run_command("eval")
+        self._run_command("eval")
 

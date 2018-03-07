@@ -49,7 +49,7 @@ class Shell(object):
         self.__set_work_dir(work_directory)
         self.__set_model_name(model_name)
 
-    def __run_command(self, command):
+    def _run_command(self, command):
         command_list = ['bash', self._main_script, command]
         return Helper.run_shell(command_list)
 
