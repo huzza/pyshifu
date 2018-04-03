@@ -1,5 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-from subprocess import check_output, CalledProcessError+
+from subprocess import check_output, CalledProcessError
 from sys import platform
 from os import path, getcwd, environ, listdir
 from pyshifu.core.enums import Platform

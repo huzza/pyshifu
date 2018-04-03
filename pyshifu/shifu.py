@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-from pyshifu.util.helper import Helper
 from pyshifu.core.shell import Shell
-from pyshifu.core.enums import CommandRunningStatus
+
 from pyshifu.core.exception.base_exception import ShifuException
 
 
@@ -15,30 +14,20 @@ class Shifu(Shell):
         except ShifuException as exception:
             print (exception.get_message())
 
-        command_list = ['bash', self._main_script, 'new', self._name]
-        status, output = Helper.run_shell(command_list)
-        if status == CommandRunningStatus.SUCCESS:
-            self._change_to_model_dir()
-            print ("Configure your ModelConfig.json in %s or directly do initialization step by 'shifu.init()'" %
-                   self.model_config_file)
-            Helper.edit_file(self._os_platform, self.model_config_file)
-        else:
-            print ("Shifu.new() failed! Please check if you successfully install pyshifu.")
-
     def init(self):
-        self._run_command("init")
+        self._run_command("init", "stats")
 
     def stats(self):
-        self._run_command("stats")
+        self._run_command("stats", "norm")
 
     def norm(self):
-        self._run_command("norm")
+        self._run_command("norm", "varsel")
 
     def varsel(self):
-        self._run_command("varsel")
+        self._run_command("varsel", "train")
 
     def train(self):
-        self._run_command("train")
+        self._run_command("train", "eval")
 
     def eval(self):
         self._run_command("eval")

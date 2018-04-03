@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from pyshifu.util.helper import Helper
 from pyshifu.core.exception.field_exception import FieldException
+from pyshifu.core.enums import CommandRunningStatus
 from os import path, getcwd, chdir
 
 
@@ -49,9 +50,27 @@ class Shell(object):
         self.__set_work_dir(work_directory)
         self.__set_model_name(model_name)
 
-    def _run_command(self, command):
+    def _run_command(self, command, next_command=None):
         command_list = ['bash', self._main_script, command]
-        return Helper.run_shell(command_list)
+        status, output = Helper.run_shell(command_list)
+        if status == CommandRunningStatus.SUCCESS:
+            if next_command:
+                print("Configure your ModelConfig.json in %s or directly do initialization step by 'shifu.%s()'" %
+                      self.model_config_file, next_command)
+                Helper.edit_file(self._os_platform, self.model_config_file)
+        else:
+            print("Shifu.%s() failed! Please check if you successfully install pyshifu." % command)
+
+    def _run_command_new(self, model_name):
+        command_list = ['bash', self._main_script, 'new', model_name]
+        status, output = Helper.run_shell(command_list)
+        if status == CommandRunningStatus.SUCCESS:
+            self._change_to_model_dir()
+            print("Configure your ModelConfig.json in %s or directly do initialization step by 'shifu.init()'" %
+                  self.model_config_file)
+            Helper.edit_file(self._os_platform, self.model_config_file)
+        else:
+            print("Shifu.new() failed! Please check if you successfully install pyshifu.")
 
 
 
