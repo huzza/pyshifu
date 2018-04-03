@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from pyshifu.util.helper import Helper
+from pyshifu.util.config_helper import ConfigHelper
 from pyshifu.core.exception.field_exception import FieldException
 from pyshifu.core.enums import CommandRunningStatus
 from os import path, getcwd, chdir
@@ -14,6 +15,7 @@ class Shell(object):
 
         self._model_config_file_name = "ModelConfig.json"
         self.model_config_file = None  # full path of the model config file
+        self._model_config = None
 
         self._os_platform = Helper.get_os_platform()
         self._shifu_home = Helper.get_shifu_home()   # home directory where shifu script with java package
@@ -57,7 +59,7 @@ class Shell(object):
             if next_command:
                 print("Configure your ModelConfig.json in %s or directly do initialization step by 'shifu.%s()'" %
                       self.model_config_file, next_command)
-                Helper.edit_file(self._os_platform, self.model_config_file)
+                # Helper.edit_file(self._os_platform, self.model_config_file)
         else:
             print("Shifu.%s() failed! Please check if you successfully install pyshifu." % command)
 
@@ -68,9 +70,32 @@ class Shell(object):
             self._change_to_model_dir()
             print("Configure your ModelConfig.json in %s or directly do initialization step by 'shifu.init()'" %
                   self.model_config_file)
-            Helper.edit_file(self._os_platform, self.model_config_file)
+            # Helper.edit_file(self._os_platform, self.model_config_file)
+            self._model_config = ConfigHelper.load_json_data(self.model_config_file)
         else:
             print("Shifu.new() failed! Please check if you successfully install pyshifu.")
+
+    def _update_config(self, main_key, config_map):
+        for key, value in config_map:
+            if type(value) == dict:
+                for ckey, cvalue in value:
+                    self._model_config[main_key][key][ckey] = cvalue
+            else:
+                self._model_config[main_key][key] = value
+        ConfigHelper.update_config(self._model_config, self.model_config_file)
+
+    def _update_config_eval(self, config_map):
+        for key, value in config_map:
+            if type(value) == dict:
+                for ckey, cvalue in value:
+                    self._model_config["evals"][0][key][ckey] = cvalue
+            else:
+                self._model_config["evals"][0][key] = value
+        ConfigHelper.update_config(self._model_config, self.model_config_file)
+
+
+
+
 
 
 
