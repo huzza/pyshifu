@@ -58,7 +58,7 @@ class Shell(object):
         if status == CommandRunningStatus.SUCCESS:
             if next_command:
                 print("Configure your ModelConfig.json in %s or directly do initialization step by 'shifu.%s()'" %
-                      self.model_config_file, next_command)
+                      (self.model_config_file, next_command))
                 # Helper.edit_file(self._os_platform, self.model_config_file)
         else:
             print("Shifu.%s() failed! Please check if you successfully install pyshifu." % command)

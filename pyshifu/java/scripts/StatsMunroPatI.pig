@@ -35,7 +35,7 @@ DEFINE GenBinningData   ml.shifu.shifu.udf.BinningDataUDF('$source_type', '$path
 DEFINE AddColumnNum     ml.shifu.shifu.udf.AddColumnNumAndFilterUDF('$source_type', '$path_model_config', '$path_column_config', 'false', 'false');
 
 -- load and purify data
-data = LOAD '$path_raw_data' USING PigStorage('$delimiter');
+data = LOAD '$path_raw_data' USING PigStorage('$delimiter', '-noschema');
 data = FILTER data BY IsDataFilterOut(*);
 
 -- convert data into column based
@@ -46,4 +46,4 @@ data_cols = FOREACH data_cols GENERATE FLATTEN($0);
 -- Do binning
 data_binning_grp = GROUP data_cols BY $0 PARALLEL $column_parallel;
 binning_info = FOREACH data_binning_grp GENERATE FLATTEN(GenBinningData(*));
-STORE binning_info INTO '$path_stats_binning_info' USING PigStorage('|', '-schema');
+STORE binning_info INTO '$path_stats_binning_info' USING PigStorage('$output_delimiter', '-schema');

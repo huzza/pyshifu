@@ -33,7 +33,7 @@ DEFINE FullScore                ml.shifu.shifu.udf.FullScoreUDF('$source_type', 
 DEFINE Scatter                  ml.shifu.shifu.udf.ScatterUDF('$source_type', '$path_column_config');
 DEFINE CalculateBinAvgScore     ml.shifu.shifu.udf.CalculateBinAvgScoreUDF('$source_type', '$path_column_config');
 
-raw = LOAD '$pathSelectedRawData' USING PigStorage('$delimiter');
+raw = LOAD '$pathSelectedRawData' USING PigStorage('$delimiter', '-noschema');
 
 fullScore = FOREACH raw GENERATE FLATTEN(FullScore(*));
 
@@ -44,5 +44,5 @@ scattered = FOREACH raw_scored GENERATE FLATTEN(Scatter(*));
 grouped = GROUP scattered BY $0;
 binAvgScore = FOREACH grouped GENERATE FLATTEN(CalculateBinAvgScore(*));
 
-STORE fullScore INTO '$pathTrainScore' USING PigStorage('|', '-schema');
-STORE binAvgScore INTO '$pathBinAvgScore' USING PigStorage('|', '-schema');
+STORE fullScore INTO '$pathTrainScore' USING PigStorage('$output_delimiter', '-schema');
+STORE binAvgScore INTO '$pathBinAvgScore' USING PigStorage('$output_delimiter', '-schema');
