@@ -52,6 +52,12 @@ class Shell(object):
         self.__set_work_dir(work_directory)
         self.__set_model_name(model_name)
 
+    def _use_existing_model(self, work_directory, model_name):
+        self._init_working_directory(work_directory, model_name)
+        self._change_to_model_dir()
+        print(self.model_config_file)
+        self._model_config = ConfigHelper.load_json_data(self.model_config_file)
+
     def _run_command(self, command, next_command=None):
         command_list = ['bash', self._main_script, command]
         status, output = Helper.run_shell(command_list)

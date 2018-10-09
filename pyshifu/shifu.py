@@ -9,6 +9,10 @@ class Shifu(Shell):
     def __init__(self):
         super(Shifu, self).__init__()
 
+    def use(self, model_name, work_dir):
+        self._use_existing_model(work_dir, model_name)
+        print('Enter to model workspace %s, execute commands for %s' % (self._model_dir, model_name))
+
     def new(self, name, work_dir=None):
         try:
             self._init_working_directory(work_dir, name)
